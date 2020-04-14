@@ -28,13 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary_storage',
     'cloudinary',
-
-    # own apps
     'users.apps.UsersConfig',
     'accounts.apps.AccountsConfig',
     'courses.apps.CoursesConfig',
-
-    # third party apps
     'six',
     'tinymce',
     # 'hitcount'
