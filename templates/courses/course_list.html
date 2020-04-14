@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% block title %}
+    <title>Digglepress Courses</title>
+{% endblock title %}
+<div class="col-lg-6">
+{% for course in courses_list %}
+        <div class="central-meta item">
+            <div class="user-post">
+                <div class="friend-info">
+                {% if course.author.profile.avatar %}
+                    <figure>
+                        <img src="{{ course.author.profile.avatar.url }}" alt="">
+                    </figure>
+                {% else %}
+                    <img src="{% static 'default.ico' %}" alt="">
+                {% endif %}
+                    <div class="friend-name">
+                        <ins><a href="{% url 'accounts:profile' course.author.username %}" title="">{{ course.author.get_full_name|title }}</a></ins>
+                        <span>published: {{ course.published }}</span>
+                    </div>
+                    <div class="post-meta">
+                        {% if course.cover %}
+                            <img src="{{ course.cover.url }}" alt="">
+                        {% endif %}
+                        <div class="we-video-info">
+                            <ul>
+                                <li>
+                                    <span class="views" data-toggle="tooltip" title="views">
+                                        <i class="fa fa-eye"></i>
+                                        <ins>1.2k</ins>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="comment" data-toggle="tooltip" title="Comments">
+                                        <i class="fa fa-comments-o"></i>
+                                        {% if course.comments %}
+                                            <ins>{{ course.comments.count }}</ins>
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="like" data-toggle="tooltip" title="like">
+                                        <i class="ti-heart"></i>
+                                        <ins>2.2k</ins>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="dislike" data-toggle="tooltip" title="dislike">
+                                        <i class="ti-heart-broken"></i>
+                                        <ins>200</ins>
+                                    </span>
+                                </li>
+                                <li class="social-media">
+                                    <div class="menu">
+                                      <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
+                                      <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
+                                      </div>
+                                      <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
+                                      </div>
+                                      <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
+                                      </div>
+                                      <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
+                                      </div>
+                                      <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
+                                      </div>
+                                      <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
+                                        </div>
+                                      </div>
+                                        <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
+                                        </div>
+                                      </div>
+                                      <div class="rotater">
+                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="friend-name">
+                            <ins><a href="{{ course.get_absolute_url }}" title="">{{ course.title|title }}</a></ins>
+                        </div>
+                        <div class="description">
+                            <p><span>{{ course.summary|capfirst }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endfor %}
+{% if is_paginated %}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"><button class="btn-view btn-load-more">Load More</button></a>
+    {% endif %}
+{% endif %}
+</div>
+{% endblock content %}

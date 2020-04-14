@@ -1,0 +1,76 @@
+{% extends 'base-user-profile.html' %}
+{% load static %}
+{% block content %}
+{% block title %}
+    <title>Delete - {{ object.title|title }}?</title>
+{% endblock title %}
+    <div class="col-lg-6">
+        <div class="central-meta item">
+            <div class="user-post">
+                <div class="friend-info">
+                    {% if request.user.profile.avatar %}
+                        <figure>
+                            <img src="{{ request.user.profile.avatar.url }}" alt="">
+                        </figure>
+                    {% else %}
+                        <img src="{% static 'default.ico' %}" alt="">
+                    {% endif %}
+                        <div class="friend-name">
+                        <ins>{{ request.user.get_full_name|title }}</ins>
+                        <span>published: {{ object.published }}</span>
+                        <span>last updated: {{ object.last_updated|timesince }} ago</span>
+                    </div>
+                    <div class="post-meta">
+                        <img src="{{ object.cover.url }}" alt="">
+                        <div class="we-video-info">
+                            <ul>
+                                <li>
+                                    <span class="views" data-toggle="tooltip" title="views">
+                                        <i class="fa fa-eye"></i>
+                                        <ins>1.2k</ins>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="comment" data-toggle="tooltip" title="Comments">
+                                        <i class="fa fa-comments-o"></i>
+                                        <ins>52</ins>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="like" data-toggle="tooltip" title="like">
+                                        <i class="ti-heart"></i>
+                                        <ins>2.2k</ins>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="dislike" data-toggle="tooltip" title="dislike">
+                                        <i class="ti-heart-broken"></i>
+                                        <ins>200</ins>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="friend-name">
+                            <ins>{{ object.title|title }}</ins>
+                        </div>
+                        <div class="description">
+                            <p>
+                                {{ object.summary|capfirst }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="friend-name">
+                        <ins class="text-danger">Are you sure to delete?</ins>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="submit-btns">
+                            <button type="submit" class="mtr-btn"><span>Yes delete</span></button>
+                            <a href="{% url 'accounts:dashboard' %}" class="ml-2" style="color: #0a98dc"> <i class="em-arrow_backward"></i> Go back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

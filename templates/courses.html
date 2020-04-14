@@ -1,0 +1,26 @@
+<aside class="sidebar static">
+    <div class="widget friend-list stick-widget">
+        <h4 class="widget-title">Your Courses </h4>
+        <div id="searchDir"></div>
+        <ul id="people-list" class="friendz-list">
+            {% for course in courses %}
+                <li>
+                    <figure>
+                        <img src="{{ course.cover_sm.url }}" alt="{{ course.author.get_full_name }}">
+                    </figure>
+                    {% if course.title|wordcount < 40 %}
+                        <div class="friendz-meta">
+                            <a href="{% url 'course:course_detail' course.slug  %}">{{ course.title|title|truncatechars:40 }}</a>
+                            <i>{{ course.published }}</i>
+                        </div>
+                    {% else %}
+                        <div class="friendz-meta">
+                            <a href="{% url 'course:course_detail' course.slug  %}">{{ course.title|title }}</a>
+                            <i>{{ course.published }}</i>
+                        </div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div><!-- friends list sidebar -->
+</aside>

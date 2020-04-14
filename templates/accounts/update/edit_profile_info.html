@@ -1,0 +1,24 @@
+{% extends 'base-user-profile.html' %}
+{% block content %}
+    {% block title %}<title>Edit Profile Info</title>{% endblock title %}
+    <div class="col-lg-6">
+        <div class="central-meta">
+            <div class="editing-info">
+                <h5 class="f-title"><i class="ti-info-alt"></i> Edit Profile Information</h5>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                      {{ field }}
+                      <label class="control-label" for="input">{{ field.label_tag }}</label><i class="mtrl-select"></i>
+                    </div>
+                    {% endfor %}
+                    <div class="submit-btns">
+                        <button type="reset" class="mtr-btn"><span>Discard</span></button>
+                        <button type="submit" class="mtr-btn"><span>Update</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- centerl meta -->
+{% endblock content %}

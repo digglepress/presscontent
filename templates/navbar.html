@@ -1,0 +1,55 @@
+{% load static %}
+{% if request.user.is_authenticated %}
+    <div class="topbar stick">
+    <div class="logo">
+        <a title="" href="{% url 'course:home' %}"><img src="{% static 'images/digglepress.png' %}" alt="digglepress"></a>
+    </div>
+    <div class="top-area">
+        <div class="top-search">
+            <form method="get" action="{% url 'course:search' %}" class="">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search Course">
+                <button type="submit" data-ripple><i class="ti-search"></i></button>
+            </form>
+        </div>
+        <ul class="setting-area">
+            <li>
+                <a href="{% url 'course:home' %}" title="Home" data-ripple=""><i class="ti-home"></i></a>
+            </li>
+            <li>
+                <a href="{% url 'course:courses' %}" title="Courses" data-ripple=""><i class="ti-book"></i></a>
+            </li>
+            <li>
+                <a href="{% url 'accounts:dashboard' %}" title="Dashboard" data-ripple=""><i class="ti-dashboard"></i></a>
+            </li>
+        </ul>
+        {% if request.user.profile.avatar %}
+            <div class="user-img">
+                <img src="{{ request.user.profile.avatar.url }}" alt="{{ request.user.username }}" title="{{ request.user.get_full_name|title }}" >
+                <div class="user-setting">
+                    <a href="{% url 'accounts:user_profile_update_form' %}" title=""><i class="ti-user"></i>edit profile</a>
+                    <a href="{% url 'accounts:user_account_update_form' %}" title=""><i class="ti-settings"></i>edit account</a>
+                    <a href="{% url 'accounts:logout' %}"><i class="ti-power-off"></i>log out</a>
+                </div>
+            </div>
+        {% else %}
+            <img src="{% static 'default.ico' %}" alt="">
+        {% endif %}
+        <span class="ti-menu main-menu" data-ripple=""></span>
+    </div>
+</div>
+    <!-- topbar -->
+{% else %}
+    <div class="topbar stick">
+        <div class="logo">
+            <a href="{% url 'course:courses' %}"><img src="{% static 'images/digglepress.png' %}" alt="{{ domain }}"></a>
+        </div>
+        <div class="top-area">
+            <div class="login-form">
+                <form action="" method="post">
+                    <a href="{% url 'accounts:login' %}"><button type="button">Sign in</button></a>
+                    <a href="{% url 'accounts:register' %}"><button type="button">Create account</button></a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}

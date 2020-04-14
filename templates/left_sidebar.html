@@ -1,0 +1,70 @@
+{% load static %}
+<aside class="sidebar static left">
+    <div class="widget">
+        <h4 class="widget-title">Shortcuts</h4>
+        <ul class="naves">
+            <li>
+                <i class="ti-clipboard"></i>
+                <a href="{% url 'course:courses' %}" title="">Courses</a>
+            </li>
+            <li>
+                <i class="ti-ink-pen"></i>
+                <a href="{% url 'course:course_create' %}" title="">add Course</a>
+            </li>
+            <li>
+                <i class="ti-dashboard"></i>
+                <a href="{% url 'accounts:dashboard' %}" title="">dashboard</a>
+            </li>
+            <li>
+                <i class="ti-user"></i>
+                <a href="#" title="">Followers</a>
+            </li>
+            <li>
+                <i class="ti-power-off"></i>
+                <a href="{% url 'accounts:logout' %}" title="">Logout</a>
+            </li>
+        </ul>
+    </div>
+    <!-- Shortcuts -->
+
+    {% if  side_course %}
+        <div class="widget">
+            <h4 class="widget-title">Newest Courses</h4>
+            {% for course in side_course %}
+            <ul class="activitiez">
+                <li>
+                    <div class="activity-meta">
+                        <i>{{ course.published|timesince }} ago</i>
+                        <span><a href="{{ course.get_absolute_url }}" title="">{{ course.title|title }}</a></span>
+                        <h6>by <a href="{% url 'accounts:profile' course.author.username %}">{{ course.author.get_full_name }}.</a></h6>
+                    </div>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- recent activites -->
+
+        <div class="widget stick-widget">
+            <h4 class="widget-title">Some Authors</h4>
+            <ul class="followers">
+                {% for user in users %}
+                    <li>
+                        {% if user.profile.avatar %}
+                            <figure><img src="{{ user.profile.avatar.url }}" alt=""></figure>
+                        {% else %}
+                            <figure><img src="{% static 'default.ico' %}" alt=""></figure>
+                        {% endif %}
+                        <div class="friend-meta">
+                            <h4><a href="{% url 'accounts:profile' user.username %}" title="">{{ user.get_full_name }}</a></h4>
+                            <a href="#" title="" class="underline">Add Friend</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    <!-- who's following -->
+
+</aside>

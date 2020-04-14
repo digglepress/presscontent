@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block nav %}
+    {{ block.super }}
+{% endblock nav %}
+{% block title %}
+    <title>{{ user.get_full_name|title }} - Profile</title>
+{% endblock title %}
+    <section>
+        <div class="gap gray-bg">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row" id="page-contents">
+                            <div class="col-lg-3">
+                                {% block sidebar-left %}
+                                <aside class="sidebar static">
+                                    <div class="widget">
+                                        <h4 class="widget-title">Socials</h4>
+                                        <ul class="socials">
+                                            <li class="facebook">
+                                                <a title="" href=""><i class="fa fa-facebook"></i> <span>facebook</span></a>
+                                            </li>
+                                            <li class="twitter">
+                                                <a title="" href=""><i class="fa fa-twitter"></i> <span>twitter</span></a>
+                                            </li>
+                                            <li class="google">
+                                                <a title="" href=""><i class="fa fa-instagram"></i> <span>instagram</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="widget" style="">
+                                        <h4 class="widget-title">{{ user.get_full_name }}</h4>
+                                        <ul class="short-profile">
+                                            <li>
+                                                <span>about</span>
+                                                <p>{{ user.profile.bio|capfirst }}</p>
+                                            </li>
+                                            <li>
+                                                <span>location</span>
+                                                <p>{{ users.profile.get_location|title }}</p>
+                                            </li>
+                                            <li>
+                                                <span>profession</span>
+                                                <p>{{ user.profile.profession|title }}</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {% if request.user == user %}
+                                        <div class="widget stick-widget" style="">
+                                            <h4 class="widget-title">account</h4>
+                                            <ul class="naves">
+                                                <li>
+                                                    <i class="ti-heart"></i>
+                                                    <a href="accounts/update/edit_interest.html">My interests</a>
+                                                </li>
+                                                <li>
+                                                    <i class="ti-user"></i>
+                                                    <a href="accounts/logout.html">120 followers</a>
+                                                </li>
+                                                <li>
+                                                    <i class="ti-plus"></i>
+                                                    <a href="accounts/logout.html">friends</a>
+                                                </li>
+                                                <li>
+                                                    <i class="ti-info-alt"></i>
+                                                    <a href="{% url 'accounts:user_profile_update_form' %}">edit profile info</a>
+                                                </li>
+                                                <li>
+                                                    <i class="ti-settings"></i>
+                                                    <a href="{% url 'accounts:user_account_update_form' %}">edit account info</a>
+                                                </li>
+                                                <li>
+                                                    <i class="ti-lock"></i>
+                                                    <a href="{% url 'accounts:password_change' %}">change password</a>
+                                                </li>
+                                                <li>
+                                                    <i class="ti-power-off"></i>
+                                                    <a href="{% url 'accounts:logout' %}">logout</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% else %}
+                                        <div class="widget stick-widget" style="">
+                                        <h4 class="widget-title">Courses By {{ user.first_name|title }}</h4>
+                                        <ul class="naves">
+                                            {% for course in courses %}
+                                                {% if course.title|wordcount < 25 %}
+                                                    <li>
+                                                        <i class="ti-book"></i>
+                                                        <a href="{% url 'course:course_detail' course.slug %}">{{ course.title|truncatechars:25}}</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li>
+                                                        <i class="ti-book"></i>
+                                                        <a href="{% url 'course:course_detail' course.slug %}">{{ course.title }}</a>
+                                                    </li>
+                                                    {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                        </div>
+                                    {% endif %}
+                                    <!-- Edit info -->
+                                </aside>
+                                {% endblock sidebar-left %}
+                            </div>
+                            <!-- sidebar -->
+                            {% block content %}
+                                <div class="col-lg-6">
+                                    {% for course in courses %}
+                                        <div class="central-meta item">
+                                            <div class="user-post">
+                                                <div class="friend-info">
+                                                    {% if course.author.profile.avatar %}
+                                                        <figure>
+                                                            <img src="{{ course.author.profile.avatar.url }}" alt="">
+                                                        </figure>
+                                                    {% else %}
+                                                        <img src="{% static 'default.ico' %}" alt="">
+                                                    {% endif %}
+                                                        <div class="friend-name">
+                                                            {% if request.user == course.author %}
+                                                                <ins><a href="{% url 'accounts:dashboard' %}" title="">{{ course.author.get_full_name|title }}</a></ins>
+                                                            {% else %}
+                                                                <ins><a href="{% url 'accounts:profile' course.author.username %}" title="">{{ course.author.get_full_name|title }}</a></ins>
+                                                            {% endif %}
+                                                        <span>published: {{ course.published }}</span>
+                                                        <span>last updated: {{ course.last_updated|timesince }} ago</span>
+                                                    </div>
+                                                    <div class="post-meta">
+                                                        <img src="{{ course.cover.url }}" alt="">
+                                                        <div class="we-video-info">
+                                                            <ul>
+                                                                <li>
+                                                                    <span class="views" data-toggle="tooltip" title="views">
+                                                                        <i class="fa fa-eye"></i>
+                                                                        <ins>1.2k</ins>
+                                                                    </span>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="comment" data-toggle="tooltip" title="Comments">
+                                                                        <i class="fa fa-comments-o"></i>
+                                                                        <ins>{{ course.comments.count }}</ins>
+                                                                    </span>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="like" data-toggle="tooltip" title="like">
+                                                                        <i class="ti-heart"></i>
+                                                                        <ins>2.2k</ins>
+                                                                    </span>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="dislike" data-toggle="tooltip" title="dislike">
+                                                                        <i class="ti-heart-broken"></i>
+                                                                        <ins>200</ins>
+                                                                    </span>
+                                                                </li>
+                                                                <li class="social-media">
+                                                                    <div class="menu">
+                                                                      <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
+                                                                      <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
+                                                                      </div>
+                                                                      <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
+                                                                      </div>
+                                                                      <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
+                                                                      </div>
+                                                                      <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
+                                                                      </div>
+                                                                      <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
+                                                                      </div>
+                                                                      <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
+                                                                        </div>
+                                                                      </div>
+                                                                        <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
+                                                                        </div>
+                                                                      </div>
+                                                                      <div class="rotater">
+                                                                        <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
+                                                                        </div>
+                                                                      </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="friend-name">
+                                                            <ins><a href="{{ course.get_absolute_url }}" title="">{{ course.title|title }}</a></ins>
+                                                        </div>
+                                                        <div class="description">
+                                                            <p>
+                                                                {{ course.summary|capfirst }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+{#                                                <div class="coment-area">#}
+{#                                                    <ul class="we-comet">#}
+{#                                                        <li>#}
+{#                                                            <div class="comet-avatar">#}
+{#                                                                <img src="images/resources/comet-1.jpg" alt="">#}
+{#                                                            </div>#}
+{#                                                            <div class="we-comment">#}
+{#                                                                <div class="coment-head">#}
+{#                                                                    <h5><a href="time-line.html" title="">Jason borne</a></h5>#}
+{#                                                                    <span>1 year ago</span>#}
+{#                                                                    <a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a>#}
+{#                                                                </div>#}
+{#                                                                <p>we are working for the dance and sing songs. this car is very awesome for the youngster. please vote this car and like our post</p>#}
+{#                                                            </div>#}
+{#                                                            <ul>#}
+{#                                                                <li>#}
+{#                                                                    <div class="comet-avatar">#}
+{#                                                                        <img src="images/resources/comet-2.jpg" alt="">#}
+{#                                                                    </div>#}
+{#                                                                    <div class="we-comment">#}
+{#                                                                        <div class="coment-head">#}
+{#                                                                            <h5><a href="time-line.html" title="">alexendra dadrio</a></h5>#}
+{#                                                                            <span>1 month ago</span>#}
+{#                                                                            <a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a>#}
+{#                                                                        </div>#}
+{#                                                                        <p>yes, really very awesome car i see the features of this car in the official website of <a href="#" title="">#Mercedes-Benz</a> and really impressed :-)</p>#}
+{#                                                                    </div>#}
+{#                                                                </li>#}
+{#                                                            </ul>#}
+{#                                                        </li>#}
+{#                                                        <li>#}
+{#                                                            <a href="#" title="" class="showmore underline">more comments</a>#}
+{#                                                        </li>#}
+{#                                                        <li class="post-comment">#}
+{#                                                            <div class="comet-avatar">#}
+{#                                                                <img src="images/resources/comet-1.jpg" alt="">#}
+{#                                                            </div>#}
+{#                                                            <div class="post-comt-box">#}
+{#                                                                <form method="post">#}
+{#                                                                    <textarea placeholder="Post your comment"></textarea>#}
+{#                                                                    <div class="add-smiles">#}
+{#                                                                        <span class="em em-expressionless" title="add icon"></span>#}
+{#                                                                    </div>#}
+{#                                                                    <button type="submit"></button>#}
+{#                                                                </form>#}
+{#                                                            </div>#}
+{#                                                        </li>#}
+{#                                                    </ul>#}
+{#                                                </div>#}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    {% if is_paginated %}
+                                        {% if page_obj.has_next %}
+                                            <a href="?page={{ page_obj.next_page_number }}">
+                                                <button class="btn-view btn-load-more">Load More</button></a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endblock content %}
+                            <div class="col-lg-3">
+                                {% block sidebar-right %}
+                                <aside class="sidebar static">
+                                    <div class="widget">
+										<div class="your-page author-board pt-4" style="text-align: center;">
+											<figure>
+												<img src="{{ user.profile.avatar_large.url }}" alt="">
+											</figure>
+											<div class="page-likes">
+												<!-- Tab panes -->
+												<div class="tab-content">
+                                                    <div class="tab-pane active fade show " >
+                                                        <h5>{{ user.get_full_name|title }}</h5>
+                                                          <p>{{ user.profile.profession|title }}</p>
+                                                    </div>
+												</div>
+											</div>
+										</div>
+									</div>
+                                    <div class="widget">
+                                        <h4 class="widget-title">Who's follownig</h4>
+                                            <ul class="followers ps-container ps-theme-default ps-active-y" data-ps-id="fab2424a-d306-1d38-1222-b747fd85a68b">
+                                                <li>
+                                                    <figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>
+                                                    <div class="friend-meta">
+                                                        <h4><a href="time-line.html" title="">Kelly Bill</a></h4>
+                                                        <a href="#" title="" class="underline">Add Friend</a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>
+                                                    <div class="friend-meta">
+                                                        <h4><a href="time-line.html" title="">Issabel</a></h4>
+                                                        <a href="#" title="" class="underline">Add Friend</a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>
+                                                    <div class="friend-meta">
+                                                        <h4><a href="time-line.html" title="">Andrew</a></h4>
+                                                        <a href="#" title="" class="underline">Add Friend</a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>
+                                                    <div class="friend-meta">
+                                                        <h4><a href="time-line.html" title="">Sophia</a></h4>
+                                                        <a href="#" title="" class="underline">Add Friend</a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <figure><img src="images/resources/friend-avatar3.jpg" alt=""></figure>
+                                                    <div class="friend-meta">
+                                                        <h4><a href="time-line.html" title="">Allen</a></h4>
+                                                        <a href="#" title="" class="underline">Add Friend</a>
+                                                    </div>
+                                                </li>
+                                            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: -80px;"><div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 80px; height: 260px; right: 0px;"><div class="ps-scrollbar-y" tabindex="0" style="top: 62px; height: 198px;"></div></div></ul>
+                                    </div>
+
+                                    <!-- end following -->
+
+                                </aside>
+                                    {% block dashboard %}
+
+                                {% endblock dashboard %}
+                                {% endblock sidebar-right %}
+                            </div><!-- sidebar -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% block footer %}
+    {{ block.super }}
+{% endblock footer %}

@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block sidebar-left %}
+    {{ block.exclude }}
+{% endblock sidebar-left %}
+{% block sidebar-right %}
+    {{ block.exclude }}
+{% endblock sidebar-right %}
+{% block content %}
+{% block title %}
+    <title>{{ course_detail.title }}</title>
+{% endblock title %}
+<div class="theme-layout">
+    <section>
+        <div class="gap ext-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="offset-lg-1 col-lg-10">
+                        <div class="detail-page">
+                            <div class="detail-top">
+                                <img src="{{ course_detail.cover.url }}" class="container-fluid" alt="">
+                                    <div class="connect-with">
+                                        <ul class="social-connect">
+                                            <li class="rs">
+                                                <i class="fa fa-rss"></i>
+                                                <span>
+                                                    <a title="" href="#">Subscribe</a>
+                                                    <i>to Rss Feed</i>
+                                                </span>
+                                            </li>
+                                            <li class="twit">
+                                                <i class="fa fa-twitter"></i>
+                                                <span>
+                                                    <a title="" href="#">Follow Us</a>
+                                                    <i>on twitter</i>
+                                                </span>
+                                            </li>
+                                            <li class="fb">
+                                                <i class="fa fa-facebook"></i>
+                                                <span>
+                                                    <a title="" href="#">Find Us</a>
+                                                    <i>on Facebook</i>
+                                                </span>
+                                            </li>
+                                            <li class="googl">
+                                                <i class="fa fa-google-plus"></i>
+                                                <span>
+                                                    <a title="" href="#">Find Us</a>
+                                                    <i>on Google plus</i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <div class="detail-meta">
+                                <h5>{{ course_detail.title|title }}</h5>
+                                <div class="post-time">
+                                    <div class="author-thumb">
+                                        {% if course_detail.author.profile.avatar %}
+                                            <img src="{{ course_detail.author.profile.avatar.url }}" alt="">
+                                        {% else %}
+                                            <img src="{% static 'default.ico' %}" alt="">
+                                        {% endif %}
+                                        <span><a href="{% url 'accounts:profile' course_detail.author.username %}" title="">By {{ course_detail.author.first_name|capfirst }}</a></span>
+                                    </div>
+                                    <span class="post-date">
+                                        <i class="fa fa-calendar"></i>
+                                        <a title="" href="#">{{ course_detail.published }}</a>
+                                    </span>
+                                    <span class="coments">
+                                        <i class="fa fa-comments"></i>
+                                        <a title="" href="#">{{ comments.count }}</a>
+                                    </span>
+                                </div>
+                                <p>
+                                    {{ course_detail.body|capfirst | safe }}
+                                </p>
+                                <div class="tag-n-cat">
+                                    <div class="tags">
+                                        <span><i class="fa fa-tags"></i> Post Tags:</span>
+                                        <a href="#" title="">News</a>
+                                        <a href="#" title="">ideas</a>
+                                        <a href="#" title="">collection</a>
+                                        <a href="#" title="">exclusive</a>
+                                        <a href="#" title="">features</a>
+                                    </div>
+                                    <div class="tags">
+                                        <span><i class="fa fa-filter"></i> Post Categories:</span>
+                                        <a href="#" title="">News</a>
+                                        <a href="#" title="">ideas</a>
+                                        <a href="#" title="">collection</a>
+                                        <a href="#" title="">exclusive</a>
+                                        <a href="#" title="">features</a>
+                                    </div>
+                                </div>
+                                {% if course_detail.author.profile.bio %}
+                                    <div class="gap-60">
+                                        <div class="site-admin">
+                                            <div class="admin-avatar">
+                                                <img src="{{ course_detail.author.profile.avatar_large.url }}" alt="">
+                                            </div>
+                                            <div class="admin-postmeta">
+                                                <h4>{{ course_detail.author.get_full_name|title }}</h4>
+                                                <span>{{ course_detail.author.profile.profession }}</span>
+                                                <p>
+                                                    {{ course_detail.author.profile.bio }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="gap-60 no-top">
+                                    <div class="comment-area">
+                                        <h4 class="comment-title">{{ comments.count }} comments</h4>
+                                        <ul class="comments">
+                                            {% for comment in comments %}
+                                                <li>
+                                                    <div class="comment-box">
+                                                        <div class="commenter-photo">
+                                                            <img alt="" src="{{ comment.author.profile.avatar.url }}">
+                                                        </div>
+                                                        <div class="commenter-meta">
+                                                            <div class="comment-titles">
+                                                                <h6>{{ comment.author.get_full_name|title }}</h6>
+                                                                <span>{{ comment.commented_at }}</span>
+                                                            </div>
+                                                            <p>{{ comment.comment }}</p>
+                                                        </div>
+                                                        <button type="button" name="button" class="reply-btn btn-primary btn-sm float-right" ><i>Reply</i></button>
+                                                    </div>
+                                                    <ul class="replies" style="display: none">
+                                                        {% for reply in comment.reply.all %}
+                                                            <li>
+                                                                <div class="comment-box">
+                                                                    <div class="commenter-photo">
+                                                                        <img alt="" src="{{ reply.author.profile.avatar.url }}">
+                                                                    </div>
+                                                                    <div class="commenter-meta">
+                                                                        <div class="comment-titles">
+                                                                            <h6>{{ reply.author.get_full_name|title }}</h6>
+                                                                            <span>{{ reply.commented_at|time }}</span>
+                                                                        </div>
+                                                                        <p>{{ reply.comment }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        {% endfor %}
+                                                    <h5>Reply</h5>
+                                                    <form action="." method="post">
+                                                        {{ comment_form.as_p }}
+                                                        {% csrf_token %}
+                                                        <!-- Hidden input for parent comment.id -->
+                                                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                                        <button class="mtr-btn" type="submit"><i>Reply</i></button>
+                                                    </form>
+                                                    </ul>
+                                                </li>
+                                            {% empty %}
+                                                <h4>Be the first to comment on this course.</h4>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- comments sec -->
+                                {% if request.user.is_authenticated %}
+                                    <div class="gap-60 no-gap">
+                                        <h4 class="comment-title">Leave a Comment</h4>
+                                        <div class="contact-form">
+                                            <form action="." method="post">
+                                                {% csrf_token %}
+                                                {% for form in comment_form %}
+                                                    <div class="form-group">
+                                                        {{ form }}
+                                                        <label class="control-label" for="input">{{ form.label }}</label><i class="mtrl-select"></i>
+                                                    </div>
+                                                {% endfor %}
+                                                <div class="submit-btns">
+                                                    <button class="mtr-btn" type="submit"><i>Comment</i></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <a href="{% url 'accounts:login' %}"><h4 class="comment-title">Sign in to post a comment</h4></a>
+                                <!-- comment form -->
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends 'base-user-profile.html' %}
+{% block content %}
+    {% block title %}<title> update Social Profile</title>{% endblock title %}
+    <div class="col-lg-6">
+        <div class="central-meta">
+            <div class="editing-info">
+                <h5 class="f-title ext-margin"><i class="ti-share"></i> Your Social Accounts</h5>
+                <form method="post">
+                {% csrf_token %}
+                    {% for field in social %}
+                    <div class="form-group">
+                      {{ field }}
+                      <label class="control-label" for="input"><i class="fa fa-{{ field.name }}-square"></i>{{ field.label_tag }}</label><i class="mtrl-select"></i>
+                    </div>
+                    {% endfor %}
+                    <div class="submit-btns">
+                        <button type="submit" class="mtr-btn"><span>Add social accounts</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- centerl meta -->
+{% endblock content %}

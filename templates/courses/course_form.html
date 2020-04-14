@@ -1,0 +1,40 @@
+{% extends 'base-user-profile.html' %}
+{% block content %}
+    {% block title %}
+        {% if not form.instance.pk %}
+            <title>Create Course</title>
+        {% else %}
+            <title>Update {{ courses.title }}</title>
+        {% endif %}
+    {% endblock title %}
+    <div class="col-lg-6">
+        <div class="central-meta">
+            <div class="editing-info">
+                {% if not form.instance.pk %}
+                    <h5 class="f-title">Create New Course</h5>
+                {% else %}
+                    <h5 class="f-title">Update: {{ courses.title }}</h5>
+                {% endif %}
+                <form method="post" enctype="multipart/form-data">
+                    {% for forms in form %}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ forms }}
+                            <label class="control-label" for="input">{{ forms.label_tag }}</label>
+                        </div>
+                    {% endfor %}
+                    <div class="submit-btns">
+                        <button type="reset" class="mtr-btn"><span>Cancel</span></button>
+                        {% if not form.instance.pk %}
+                            <button type="submit" class="mtr-btn"><span>Create course</span></button>
+                        {% else %}
+                            <button type="submit" class="mtr-btn"><span>Update course</span></button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- center meta -->
+{% endblock content %}
+

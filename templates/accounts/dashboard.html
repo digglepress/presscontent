@@ -1,0 +1,167 @@
+{% extends 'base-user-profile.html' %}
+{% load static %}
+{% block content %}
+{% block title %}
+    <title>Dashboard - {{ request.user.get_full_name|title }}</title>
+{% endblock title %}
+    <div class="col-lg-6">
+        {% for course in courses %}
+            <div class="central-meta item">
+                <div class="user-post">
+                    <div class="friend-info">
+                        {% if course.author.profile.avatar %}
+                            <figure>
+                                <img src="{{ course.author.profile.avatar.url }}" alt="">
+                            </figure>
+                        {% else %}
+                            <img src="{% static 'default.ico' %}" alt="">
+                        {% endif %}
+                            <div class="friend-name">
+                            <ins><a href="{% url 'accounts:profile' course.author.username %}" title="">{{ course.author.get_full_name|title }}</a></ins>
+                            <span>published: {{ course.published }}</span>
+                            <span>last updated: {{ course.last_updated|timesince }} ago</span>
+                        </div>
+                        <div class="post-meta">
+                            <img src="{{ course.cover.url }}" alt="">
+                            <div class="we-video-info">
+                                <ul>
+                                    <li>
+                                        <a href="{% url 'course:course_update' course.slug %}"><span class="" data-toggle="tooltip" title="">
+                                            <i class="ti-write"></i>
+                                            <ins>Update</ins>
+                                        </span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'course:course_delete' course.slug %}"><span class="dislike" data-toggle="tooltip" title="">
+                                            <i class="ti-trash"></i>
+                                            <ins>Delete</ins>
+                                        </span></a>
+                                    </li>
+                                    <li>
+                                        <span class="views" data-toggle="tooltip" title="views">
+                                            <i class="fa fa-eye"></i>
+                                            <ins>1.2k</ins>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="comment" data-toggle="tooltip" title="Comments">
+                                            <i class="fa fa-comments-o"></i>
+                                            <ins>{{ course.comments.count }}</ins>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="like" data-toggle="tooltip" title="like">
+                                            <i class="ti-heart"></i>
+                                            <ins>2.2k</ins>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="dislike" data-toggle="tooltip" title="dislike">
+                                            <i class="ti-heart-broken"></i>
+                                            <ins>200</ins>
+                                        </span>
+                                    </li>
+                                    <li class="social-media">
+                                        <div class="menu">
+                                          <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
+                                          <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
+                                          </div>
+                                          <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
+                                          </div>
+                                          <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
+                                          </div>
+                                          <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
+                                          </div>
+                                          <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
+                                          </div>
+                                          <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
+                                            </div>
+                                          </div>
+                                            <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
+                                            </div>
+                                          </div>
+                                          <div class="rotater">
+                                            <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="friend-name">
+                                <ins><a href="{{ course.get_absolute_url }}" title="">{{ course.title|title }}</a></ins>
+                            </div>
+                            <div class="description">
+                                <p>
+                                    {{ course.summary|capfirst }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+{#                    <div class="coment-area">#}
+{#                        <ul class="we-comet">#}
+{#                            {% for comment in course.comments.all %}#}
+{#                                <li>#}
+{#                                    <div class="comet-avatar">#}
+{#                                        <img src="{{ comment.author.profile.avatar.url }}" alt="">#}
+{#                                    </div>#}
+{#                                    <div class="we-comment">#}
+{#                                        <div class="coment-head">#}
+{#                                            <h5><a href="{% url 'accounts:profile' comment.author.username %}" title="">{{ comment.author.get_full_name|title }}</a></h5>#}
+{#                                            <span>1 year ago</span>#}
+{#                                            <button type="button" name="button" class="reply-btn btn-primary btn-sm float-right" ><i>Reply</i></button>#}
+{#                                        </div>#}
+{#                                        <p>{{ comment.comment }}</p>#}
+{#                                    </div>#}
+{#                                        <ul class="replies" style="display: none">#}
+{#                                            {% for reply in comment.reply.all %}#}
+{#                                                <li>#}
+{#                                                    <div class="comet-avatar">#}
+{#                                                        <img src="{{ reply.author.profile.avatar.url }}" alt="">#}
+{#                                                    </div>#}
+{#                                                    <div class="we-comment">#}
+{#                                                        <div class="coment-head">#}
+{#                                                            <h5><a href="{% url 'accounts:profile' reply.author.username %}" title="">{{ comment.author.get_full_name|title }}</a></h5>#}
+{#                                                            <span>{{ reply.commented_at }}</span>#}
+{#                                                            <a class="we-reply" href="#" title="Reply"><i class="fa fa-reply"></i></a>#}
+{#                                                        </div>#}
+{#                                                        <p>{{ reply.comment }}</p>#}
+{#                                                    </div>#}
+{#                                                </li>#}
+{#                                            {% endfor %}#}
+{#                                        </ul>#}
+{#                                </li>#}
+{#                            {% endfor %}#}
+{#                            <li class="post-comment">#}
+{#                                <div class="comet-avatar">#}
+{#                                    <img src="{{ request.user.profile.avatar.url }}" alt="">#}
+{#                                </div>#}
+{#                                <div class="post-comt-box">#}
+{#                                    <form method="post">#}
+{#                                        <textarea placeholder="Post your comment"></textarea>#}
+{#                                        <div class="add-smiles">#}
+{#                                            <span class="em em-expressionless" title="add icon"></span>#}
+{#                                        </div>#}
+{#                                        <button type="submit"></button>#}
+{#                                    </form>#}
+{#                                </div>#}
+{#                            </li>#}
+{#                        </ul>#}
+{#                    </div>#}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <!-- centerl meta -->
+{% endblock content %}
+{% block dashboard %}
+    {% include 'courses.html' %}
+{% endblock dashboard %}
